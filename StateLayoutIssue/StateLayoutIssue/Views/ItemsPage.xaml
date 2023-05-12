@@ -1,0 +1,71 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="StateLayoutIssue.Views.ItemsPage"
+             Title="{Binding Title}"
+             xmlns:local="clr-namespace:StateLayoutIssue.ViewModels"  
+             xmlns:model="clr-namespace:StateLayoutIssue.Models"  
+             xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
+             x:Name="BrowseItemsPage">
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Add" Command="{Binding AddItemCommand}" />
+    </ContentPage.ToolbarItems>
+    <!--
+      Remove xct:StateLayout.CurrentState="{Binding CurrentState}" and it will display as expected.
+    -->
+    <StackLayout xct:StateLayout.CurrentState="{Binding CurrentState}" IsVisible="true">
+        <CollectionView x:Name="ItemsListView"
+                        ItemsSource="{Binding Items}"
+                        SelectionMode="None"
+                        VerticalOptions="StartAndExpand">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <StackLayout Padding="10" 
+                                    x:DataType="model:Item"
+                                    BackgroundColor="Yellow">
+                        <Label Text="{Binding Text}" 
+                            LineBreakMode="NoWrap" 
+                            Style="{DynamicResource ListItemTextStyle}" 
+                            FontSize="16" />
+                        <Label Text="{Binding Description}" 
+                            LineBreakMode="NoWrap"
+                            Style="{DynamicResource ListItemDetailTextStyle}"
+                            FontSize="13" />
+                        <StackLayout.GestureRecognizers>
+                            <TapGestureRecognizer 
+                                NumberOfTapsRequired="1"
+                                Command="{Binding Source={RelativeSource AncestorType={x:Type local:ItemsViewModel}}, Path=ItemTapped}"		
+                                CommandParameter="{Binding .}">
+                            </TapGestureRecognizer>
+                        </StackLayout.GestureRecognizers>
+                    </StackLayout>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+        <StackLayout VerticalOptions="End"
+                        Orientation="Horizontal">
+            <Label Text="Example... 1"
+                    HorizontalOptions="CenterAndExpand"
+                    BackgroundColor="Red"/>
+        </StackLayout>
+        <StackLayout VerticalOptions="End"
+                    Orientation="Horizontal">
+            <Label Text="Example... 2"
+                HorizontalOptions="CenterAndExpand"
+                BackgroundColor="Red"/>
+        </StackLayout>
+        <StackLayout VerticalOptions="End"
+                    Orientation="Horizontal">
+            <Label Text="Example... 3"
+                HorizontalOptions="CenterAndExpand"
+                BackgroundColor="Red"/>
+        </StackLayout>
+
+            <!-- Additional Layouts -->
+        <xct:StateLayout.StateViews>
+            <xct:StateView StateKey="Loading">
+                <ActivityIndicator IsRunning="True"/>
+            </xct:StateView>
+        </xct:StateLayout.StateViews>
+    </StackLayout>
+</ContentPage>
